@@ -1,0 +1,24 @@
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    hostname: otel-collector
+    networks:
+      - collectorandprometheus
+    restart: always
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+
+  prometheus:
+    image: prom/prometheus:latest
+    hostname: prometheus
+    networks:
+      - collectorandprometheus
+    restart: always
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+
+networks:
+  collectorandprometheus: {}
